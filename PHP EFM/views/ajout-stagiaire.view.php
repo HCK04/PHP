@@ -71,7 +71,7 @@ require "../controllers/ajout-stagiaire.controller.php";
 <body>
     <div class="main">
         <h1>Inserer un Nouveau Stagiaire</h1>
-        <form action="InsererStagiaire.php" method="POST">
+        <form action="../controllers/ajout-stagiaire.controller.php" method="POST">
             <label for="nom">Nom</label>
             <input type="text" id="nom" name="nom" placeholder="Entrer le nom">
 
