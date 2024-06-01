@@ -1,152 +1,103 @@
 <?php
+require "../database.php";
 
-require "../controllers/liste-stagiaire.controller.php";
+$statement = $pdo->prepare("SELECT * FROM stagiaire JOIN filiere ON stagiaire.idFiliere = filiere.idFiliere");
+$statement->execute();
+$stagiaires = $statement->fetchAll();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Liste des Stagiaires</title>
     <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            background: #f3f3f3;
+            flex-direction: column;
+            margin: 0;
+        }
 
-@charset "UTF-8";
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+        .main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 80%;
+            text-align: center;
+        }
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
-  line-height: 1.42em;
-  color:white;
-  background-color:white;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-h1 {
-  font-size:3em; 
-  font-weight: 300;
-  line-height:1em;
-  text-align: center;
-  color: #4DC3FA;
-}
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
 
-h2 {
-  font-size:1em; 
-  font-weight: 300;
-  text-align: center;
-  display: block;
-  line-height:1em;
-  padding-bottom: 2em;
-  color: #FB667A;
-}
+        th {
+            background-color: #f4f4f4;
+        }
 
-h2 a {
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #FB667A;
-  text-decoration: none;
-}
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
 
-.blue { color: #185875; }
-.yellow { color: #FFF842; }
+        a.delete {
+            color: red;
+        }
 
-.container th h1 {
-	  font-weight: bold;
-	  font-size: 1em;
-  text-align: left;
-  color: white;
-}
-
-.container td {
-	  font-weight: normal;
-	  font-size: 1em;
-  -webkit-box-shadow: 0 2px 2px -2px grey;
-	   -moz-box-shadow: 0 2px 2px -2px grey;
-	        box-shadow: 0 2px 2px -2px grey;
-}
-
-.container {
-	  text-align: left;
-	  overflow: hidden;
-	  width: 80%;
-	  margin: 0 auto;
-  display: table;
-  padding: 0 0 8em 0;
-}
-
-.container td, .container th {
-	  padding-bottom: 2%;
-	  padding-top: 2%;
-  padding-left:2%;  
-}
-
-/* Background-color of the odd rows */
-.container tr:nth-child(odd) {
-	  background-color: #323C50;
-}
-
-/* Background-color of the even rows */
-.container tr:nth-child(even) {
-	  background-color: #2C3446;
-}
-
-.container th {
-	  background-color: #1F2739;
-}
-
-.container td:first-child { color: #FB667A; }
-
-.container tr:hover {
-   background-color: #464A52;
--webkit-box-shadow: 0 6px 6px -6px #0E1119;
-	   -moz-box-shadow: 0 6px 6px -6px #0E1119;
-	        box-shadow: 0 6px 6px -6px #0E1119;
-}
-
-.container td:hover {
-  background-color: #FFF842;
-  color: #403E10;
-  font-weight: bold;
-  
-  box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
-  transform: translate3d(6px, -6px, 0);
-  
-  transition-delay: 0s;
-	  transition-duration: 0.4s;
-	  transition-property: all;
-  transition-timing-function: line;
-}
-
-@media (max-width: 800px) {
-.container td:nth-child(4),
-.container th:nth-child(4) { display: none; }
-}
+        button {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            background-color: #4CAF50;
+            width: 100%;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
-    <h1>Table Stagiaires</h1>
-
-<table class="container">
-	<thead>
-		<tr>
-			<th><h1>ID</h1></th>
-			<th><h1>Nom</h1></th>
-			<th><h1>Prenom</h1></th>
-            <th><h1>Filiere</h1></th>
-		</tr>
-	</thead>
-	<tbody>
-    <?php foreach ($stagiaires as $stagiaire): ?>
-		<tr>
-			<td><?= $stagiaire['idStagiaire'] ?></td>
-			<td><?= $stagiaire['nom'] ?></td>
-			<td><?= $stagiaire['prenom'] ?></td>
-            <td><?= $stagiaire['intitule'] ?></td>
-		</tr>
-        <?php endforeach; ?>
-	</tbody>
-</table>
-    
-    
+    <div class="main">
+        <h1>Liste des Stagiaires</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Filière</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($stagiaires as $stagiaire): ?>
+                <tr>
+                    <td><?php echo $stagiaire['nom']; ?></td>
+                    <td><?php echo $stagiaire['prenom']; ?></td>
+                    <td><?php echo $stagiaire['intitule']; ?></td>
+                    <td>
+                        <a href="../views/modifier-stagiaire.view.php?id=<?php echo $stagiaire['idStagiaire']; ?>">Modifier</a> |
+                        <a href="../controllers/ajout-stagiaire.controller.php?action=delete&id=<?php echo $stagiaire['idStagiaire']; ?>" class="delete">Supprimer</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <a href="../views/ajout-stagiaire.view.php"><button>Ajouter un Stagiaire</button></a>
+    </div>
 </body>
 </html>

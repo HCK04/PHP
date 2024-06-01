@@ -1,3 +1,5 @@
+<?php require 'database.php';
+?>
 <!DOCTYPE html>
 <html>
 
@@ -112,7 +114,6 @@ button {
     <?php
     session_start();
 
-   
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $login = $_POST['login'];
@@ -131,7 +132,7 @@ button {
             if ($statement->rowCount() == 1) {
                 $_SESSION['loggedin'] = true;
                 $_SESSION['login'] = $login;
-                header("Location: prive.php");
+                header("Location: views/liste-stagiaire.view.php");
                 exit();
             } else {
                 echo "Login or password is incorrect.";
