@@ -13,11 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $sql = 'SELECT * FROM users';
 
 $statement = $pdo->prepare($sql);
-
-
 $statement->execute();
-
-
 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 echo '<pre>';
